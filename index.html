@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div>
+    <h2>Add Employee</h2>
+    <form>
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+  
+      <label for="profession">Profession:</label>
+      <input type="text" id="profession" required>
+  
+      <label for="age">Age:</label>
+      <input type="number" id="age" required>
+  
+      <button type="submit" id="add-employee-btn">Add Employee</button>
+    </form>
+  
+    <div id="messages"></div>
+  
+    <h2>Added Employees</h2>
+    <div id="employee-list"></div>
+  </div>
+  <script>
+    let employees = [];
+
+function addEmployee(event) {
+  event.preventDefault();
+  
+  const name = document.getElementById("name").value;
+  const profession = document.getElementById("profession").value;
+  const age = document.getElementById("age").value;
+  
+  if (name && profession && age) {
+    const id = employees.length + 1;
+    const employee = { id, name, profession, age };
+    employees.push(employee);
+    updateEmployeeList();
+    showMessage("Employee added successfully.", "success");
+    document.getElementById("name").value = "";
+    document.getElementById("profession").value = "";
+    document.getElementById("age").value = "";
+  } else {
+    showMessage("Please fill out all fields.", "error");
+  }
+}
+
+function deleteEmployee(id) {
+  employees = employees.filter(employee => employee.id !== id);
+  updateEmployeeList();
+}
+
+function updateEmployeeList() {
+  const employeeList = document.getElementById("employee-list");
+  employeeList.innerHTML = "";
+  employees.forEach(employee => {
+    const div = document.createElement("div");
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => deleteEmployee(employee.id));
+    div.innerHTML = `ID: ${employee.id}<br>Name: ${employee.name}<br>Profession: ${employee.profession}<br>Age: ${employee.age}`;
+    div.appendChild(deleteButton);
+    employeeList.appendChild(div);
+  });
+}
+
+function showMessage(message, type) {
+  const messages = document.getElementById("messages");
+  messages.innerHTML = "";
+  const div = document.createElement("div");
+  div.textContent = message;
+  div.classList.add(type);
+  messages.appendChild(div);
+}
+
+document.getElementById("add-employee-btn").addEventListener("click", addEmployee);
+  </script>
+</body>
+</html>
